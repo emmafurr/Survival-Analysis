@@ -1,0 +1,169 @@
+---
+title: "HW#2"
+name: 'Emma Furr'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+#1 Wolf Population dies out
+```{r}
+x1 <- 1000 #start with a poluation of 1000 rabbits
+x2 <- 1000 #start with a population of 1000 wolves
+steps = 5000
+
+rabbits <- rep(0, steps)
+wolves <- rep(0, steps)
+step <- rep(0, steps)
+
+# We define our b, d, q > 0, so that the wolf population dies out
+b <- 5
+d <- 30
+q <- 0.05
+
+for(i in c(1:steps)){
+  
+  bRab <- ((b*x1)/((b*x1) + (d*x2) + (q*x1*x2))) #transition prob. of rabbit being born (birth rate)
+  dRbW <- ((q*x1*x2)/((b*x1) + (d*x2) + (q*x1*x2))) #transition prob. of a rabbit eaten and a new wolf born
+  dWolf <- ((d*x2)/((b*x1) + (d*x2) + (q*x1*x2))) #transition prob. of wolf dying of hunger (death rate)
+
+  rabbits[i] <- x1
+  wolves[i] <- x2
+  
+  result <- sample(c('x1', 'x1x2', 'x2'), size = 1, replace = FALSE, prob = c(bRab, dRbW, dWolf))
+  step[i] <- result
+  
+  if(result == 'x1'){ #a rabbit is born and added to the population
+    x1 <- x1+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else if(result == 'x1x2'){ #a rabbit dies and is taken from the population and a wolf is born and added to the population
+    x1 <- x1-1
+    x2 <- x2+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else{# if(result == 'x2'){ #a wolf dies of hunger and is taken from the population
+    x2 <- x2 - 1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+}  
+
+#c(rabbits, wolves)
+plot(rabbits, wolves, type = 'l')
+
+```
+# The wolf population will die out, and eventually, the rabbit population will constantly increase since there are no wolves to eat them.
+
+#2 Rabbit population dies out
+```{r}
+x1 <- 1000 #start with a poluation of 1000 rabbits
+x2 <- 1000 #start with a population of 1000 wolves
+steps = 3000
+
+rabbits <- rep(0, steps)
+wolves <- rep(0, steps)
+step <- rep(0, steps)
+
+bRab <- c()
+dRbW <- c()
+dWolf <- c()
+
+# We define our b, d, q > 0, so that the rabbit population dies out
+b <- 5
+d <- 30
+q <- 5
+
+for(i in c(1:steps)){
+  
+  bRab[i] <- ((b*x1)/((b*x1) + (d*x2) + (q*x1*x2)))
+  dRbW[i]<- ((q*x1*x2)/((b*x1) + (d*x2) + (q*x1*x2)))
+  dWolf[i] <- ((d*x2)/((b*x1) + (d*x2) + (q*x1*x2)))
+  
+  rabbits[i] <- x1
+  wolves[i] <- x2
+  
+  result <- sample(c('x1', 'x1x2', 'x2'), size = 1, replace = FALSE, prob = c(bRab[i], dRbW[i], dWolf[i]))
+  step[i] <- result
+  
+  if(result == 'x1'){ 
+    x1 <- x1+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else if(result == 'x1x2'){ 
+    x1 <- x1-1
+    x2 <- x2+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else{# if(result == 'x2'){
+    x2 <- x2 - 1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+}  
+
+#c(rabbits, wolves)
+plot(rabbits, wolves, type = 'l')
+```
+# The rabbit population dies off, and eventually the wolves will die off as well since they will have nothing to eat.
+
+
+#3 Both populations move up and down together
+```{r}
+x1 <- 1000 #start with a poluation of 1000 rabbits
+x2 <- 1000 #start with a population of 1000 wolves
+steps = 50000
+
+rabbits <- rep(0, steps)
+wolves <- rep(0, steps)
+step <- rep(0, steps)
+
+# We define our b, d, q > 0, so that the populations of rabbits and wolves move up and down together.
+b <- 150
+d <- 250
+q <- 0.3
+
+for(i in c(1:steps)){
+  
+  bRab <- ((b*x1)/((b*x1) + (d*x2) + (q*x1*x2)))
+  dRbW <- ((q*x1*x2)/((b*x1) + (d*x2) + (q*x1*x2)))
+  dWolf <- ((d*x2)/((b*x1) + (d*x2) + (q*x1*x2)))
+  
+  rabbits[i] <- x1
+  wolves[i] <- x2
+  
+  result <- sample(c('x1', 'x1x2', 'x2'), size = 1, replace = FALSE, prob = c(bRab, dRbW, dWolf))
+  step[i] <- result
+  
+  if(result == 'x1'){ 
+    x1 <- x1+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else if(result == 'x1x2'){ 
+    x1 <- x1-1
+    x2 <- x2+1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+  
+  else{# if(result == 'x2'){
+    x2 <- x2 - 1
+    rabbits[i+1] <- x1
+    wolves[i+1] <- x2
+  }
+}  
+
+#c(rabbits, wolves)
+plot(rabbits, wolves, type = 'l')
+```
+# The population of rabbits and wolves are both dying and being born, so they are moving up and down together in a circlular manner.
